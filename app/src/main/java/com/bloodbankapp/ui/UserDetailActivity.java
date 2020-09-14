@@ -68,12 +68,14 @@ public class UserDetailActivity extends BaseActivity {
 
     // fun to  open mail screen
     void openMail(String email, String mailSubject, String mailBody) {
-        String mailto = "mailto:" + email +
-                "&subject=" + Uri.encode(mailSubject) +
-                "&body=" + Uri.encode(mailBody);
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setData(Uri.parse(mailto));
+        Uri uri = Uri.parse("mailto:" + email)
+                .buildUpon()
+                .appendQueryParameter("subject",mailSubject)
+                .appendQueryParameter("body", mailBody)
+                .build();
 
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, uri);
+        startActivity(emailIntent);
         try {
             startActivity(emailIntent);
         } catch (ActivityNotFoundException e) {
